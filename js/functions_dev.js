@@ -99,34 +99,21 @@ function getDaysInMonth(month) {
 
 function timeElapse(date, mode){
 	var current = new Date();
-	var years = NaN;
-	var month = NaN;
-	var days = NaN;
-	var hours = NaN;
-	var minutes = NaN;
-	var seconds = NaN;
+	var seconds = Math.round((current.getTime() - date.getTime()) / 1000);
+
 	if (mode == 1) {
-		years = current.getFullYear() - date.getFullYear();
-		if (years > 0) {
-			current.setYear(current.getFullYear() - years);
-		}
-		months = current.getMonth() - date.getMonth();
-		if (months > 0) {
-			current.setMonth(current.getMonth() - months);
-		}
-		days = current.getDate() - date.getDate();
-		if (days > 0) {
-			current.setDate(current.getDate() - months);
-		}
-	}
-	seconds = Math.round((current.getTime() - date.getTime()) / 1000);
-	if (isNaN(days)) {
-		days = Math.floor(seconds / (3600 * 24));
+		var years = current.getFullYear() - date.getFullYear();
+		var months = current.getMonth() - date.getMonth();
+		var days = current.getDate() - date.getDate();
+	} else {
+		var days = Math.floor(seconds / (3600 * 24));
 	}
 	seconds = seconds % (3600 * 24);
-	hours = Math.floor(seconds / 3600);
+
+	var hours = Math.floor(seconds / 3600);
 	seconds = seconds % 3600;
-	minutes = Math.floor(seconds / 60);
+
+	var minutes = Math.floor(seconds / 60);
 	seconds = seconds % 60;
 	
 	if (seconds < 0) {
@@ -142,13 +129,14 @@ function timeElapse(date, mode){
 		days--;
 	}
 	if (days < 0) {
-		days += getDaysInMonth(new Date().getMonth());
+		days += getDaysInMonth(current.getMonth());
 		months--;
 	}
 	if (months < 0) {
 		months += 12;
 		years--;
 	}
+
 	if (hours < 10) {
 		hours = "0" + hours;
 	}
